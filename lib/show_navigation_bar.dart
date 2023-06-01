@@ -96,14 +96,26 @@ class CustomSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    close(context, null);
+
+    WeatherManager weatherManager = WeatherManager();
     return FutureBuilder(
-        future: WeatherManager.getWeather(query),
+        future: weatherManager.getWeather(query),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            close(context, null);
+            if (snapshot.hasError) {
+           return Center(child:Text("Etwas ist schief gelaufen, versuchen sie es noch einmalw"),);
+          }else{
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+  // executes after build
+close(context, null);
+  });
           }
-          return Container();
+          }
+           if (snapshot.connectionState == ConnectionState.waiting) {
+            
+           return Center(child:CircularProgressIndicator(),);
+          }
+     return Container();
         });
     // List<String> matchQuery = [];
 

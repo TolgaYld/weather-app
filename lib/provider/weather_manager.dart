@@ -9,12 +9,25 @@ class WeatherManager {
 
   static const apiKey = "apikey 3ygIzZUDsTbWk09FoMs189:04Opb9zghEo0PT9rrdhRZP";
 
-  static Future getWeather(String city) async {
+   Future getWeather(String city) async {
     try {
       Dio dio = Dio();
-      var result = await dio.get(url + city);
+      var result = await dio.get(url + city, options: Options(headers: {"Authorization": apiKey}));
+
+
+      if(result.data["success"] == false){
+        throw Error();
+      }else{
+        weather.clear();
+List wList = result.data["result"];
+        for (var i = 0; i < wList.length; i++) {
+          // DateTime()
+        }
+      }
+      print(result.data);
     } catch (e) {
       print(e);
+      throw Error();
     }
   }
 }

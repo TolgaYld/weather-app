@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapp/provider/weather.dart';
 import 'package:weatherapp/show_navigation_bar.dart';
 
 void main() {
   runApp(const MyApp());
+
 }
 
 class MyApp extends StatelessWidget {
