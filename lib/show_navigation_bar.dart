@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapp/provider/weather.dart';
 import 'package:weatherapp/provider/weather_manager.dart';
 import 'package:weatherapp/screens/favorites_screen.dart';
 import 'package:weatherapp/screens/show_weather_screen.dart';
@@ -13,7 +14,11 @@ class ShowNavigationBar extends StatefulWidget {
 class _ShowNavigationBarState extends State<ShowNavigationBar> {
   int currentIndex = 0;
 
-  List<Widget> screens = const [
+  List<Weather> weatherList = [];
+
+  WeatherManager weatherManager = WeatherManager();
+
+  List<Widget> screens = [
     ShowWeatherScreen(),
     FavoritesScreen(),
   ];
@@ -22,23 +27,11 @@ class _ShowNavigationBarState extends State<ShowNavigationBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("Weather-App"),
-            IconButton(
-              icon: Icon(
-                Icons.search,
-              ),
-              onPressed: () async {
-                showSearch(context: context, delegate: CustomSearchDelegate());
-              },
-            )
-          ],
-        ),
+        title: Text("Weather-App"),
         centerTitle: true,
       ),
-      body: screens[currentIndex],
+      body: GestureDetector(
+          onTap: () => FocusScope, child: screens[currentIndex]),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: currentIndex,
         onTap: (index) => setState(() => currentIndex = index),
@@ -58,106 +51,5 @@ class _ShowNavigationBarState extends State<ShowNavigationBar> {
         ],
       ),
     );
-  }
-}
-
-class CustomSearchDelegate extends SearchDelegate {
-  List<String> searchResults = [
-    "Aachen",
-    "Aalen",
-    "Aberdeen",
-    "Altenburg",
-    "Ansbach",
-    "Aschaffenburg",
-    "Augsburg",
-    "Amsterdam",
-    "Ankara",
-  ];
-  @override
-  List<Widget>? buildActions(BuildContext context) {
-    return [
-      IconButton(
-        onPressed: () {
-          query = '';
-        },
-        icon: Icon(Icons.clear),
-      )
-    ];
-  }
-
-  @override
-  Widget? buildLeading(BuildContext context) {
-    return IconButton(
-        onPressed: () {
-          close(context, null);
-        },
-        icon: Icon(Icons.arrow_back));
-  }
-
-  @override
-  Widget buildResults(BuildContext context) {
-
-    WeatherManager weatherManager = WeatherManager();
-    return FutureBuilder(
-        future: weatherManager.getWeather(query),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError) {
-           return Center(child:Text("Etwas ist schief gelaufen, versuchen sie es noch einmalw"),);
-          }else{
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-  // executes after build
-close(context, null);
-  });
-          }
-          }
-           if (snapshot.connectionState == ConnectionState.waiting) {
-            
-           return Center(child:CircularProgressIndicator(),);
-          }
-     return Container();
-        });
-    // List<String> matchQuery = [];
-
-    // for (int i = 0; i < searchResults.length; i++) {
-    //   if (searchResults[i].toLowerCase().contains(query.toLowerCase())) {
-    //     matchQuery.add(searchResults[i]);
-    //   }
-    // }
-    // return ListView.builder(
-    //     itemCount: matchQuery.length,
-    //     itemBuilder: (context, index) {
-    //       var result = matchQuery[index];
-    //       return ListTile(
-    //         title: Text(result),
-    //       );
-    //     });
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        close(context, null);
-      },
-      child: ListTile(
-        title: Text(query),
-      ),
-    );
-    // List<String> matchQuery = [];
-
-    // for (int i = 0; i < searchResults.length; i++) {
-    //   if (searchResults[i].toLowerCase().contains(query.toLowerCase())) {
-    //     matchQuery.add(searchResults[i]);
-    //   }
-    // }
-    // return ListView.builder(
-    //     itemCount: matchQuery.length,
-    //     itemBuilder: (context, index) {
-    //       var result = matchQuery[index];
-    //       return ListTile(
-    //         title: Text(result),
-    //       );
-    //     });
   }
 }

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:weatherapp/provider/weather.dart';
 
 class WeatherWidget extends StatelessWidget {
-  const WeatherWidget({super.key});
+  WeatherWidget({super.key, required this.weather});
+
+  Weather weather;
 
   @override
   Widget build(BuildContext context) {
@@ -19,31 +22,21 @@ class WeatherWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  "München",
+                  weather.city,
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
-                Icon(
-                  Icons.sunny,
-                  color: Colors.white,
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.star_border,
-                  ),
-                  color: Colors.white,
-                  onPressed: () async {},
-                ),
+                Image.network(weather.iconLink!, scale: 20),
               ],
             ),
             Divider(),
             Column(
               children: [
                 Text(
-                  "Montag",
+                  weather.day,
                   style: TextStyle(
                     fontSize: 27,
                     fontWeight: FontWeight.bold,
@@ -66,7 +59,7 @@ class WeatherWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              "15",
+                              weather.min,
                               style: TextStyle(
                                 fontSize: 21,
                                 fontWeight: FontWeight.bold,
@@ -86,7 +79,7 @@ class WeatherWidget extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              "30",
+                              weather.max,
                               style: TextStyle(
                                 fontSize: 21,
                                 fontWeight: FontWeight.bold,
@@ -100,7 +93,7 @@ class WeatherWidget extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          "Durchschnittlich: ",
+                          "Degree: ",
                           style: TextStyle(
                             fontSize: 21,
                             fontWeight: FontWeight.bold,
@@ -108,7 +101,7 @@ class WeatherWidget extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          "27",
+                          weather.degree,
                           style: TextStyle(
                             fontSize: 21,
                             fontWeight: FontWeight.bold,

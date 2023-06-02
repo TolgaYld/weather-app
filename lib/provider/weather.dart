@@ -12,6 +12,6 @@ class Weather {
     required this.min,
     required this.max,
     required this.degree,
-     this.iconLink,
+    this.iconLink,
   });
 }
